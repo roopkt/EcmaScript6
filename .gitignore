@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link data-require="jasmine@*" data-semver="2.0.0" rel="stylesheet" href="//cdn.jsdelivr.net/jasmine/2.0.0/jasmine.css" />
+    <script data-require="jasmine@*" data-semver="2.0.0" src="//cdn.jsdelivr.net/jasmine/2.0.0/jasmine.js"></script>
+    <script data-require="jasmine@*" data-semver="2.0.0" src="//cdn.jsdelivr.net/jasmine/2.0.0/jasmine-html.js"></script>
+    <script data-require="jasmine@*" data-semver="2.0.0" src="//cdn.jsdelivr.net/jasmine/2.0.0/boot.js"></script>
+    <script data-require="traceur@*" data-semver="0.0.0-20140302" src="https://traceur-compiler.googlecode.com/git/bin/traceur.js"></script>
+    <script>
+        traceur.options.experimental = true;
+    </script>
+    <script data-require="traceur@*" data-semver="0.0.0-20140302" src="https://traceur-compiler.googlecode.com/git/src/bootstrap.js"></script>
+
+    <script type="module" >
+       //Let
+        describe("lambda", function() {
+            it("is lambda", function() {
+                var add = (x, y)=>x + y;
+                var result = add(3, 4);
+                expect(result).toBe(7);
+            });
+        });
+
+        describe("let", function() {
+            it("is working", function() {
+                let add = (x, y)=>x + y;
+                var result = add(3, 4);
+                expect(result).toBe(7);
+            });
+        });
+
+        describe("let has lexical scope", function() {
+            it("is working", function() {
+                var doWork = (flag) =>
+                {
+                    if (flag) {
+                        let
+                        x = 3;
+                        return x;
+                    }
+
+                }
+                var result = doWork(true);
+                expect(result).toBe(3);
+
+            });
+        });
+        //-----
+        
+        //const-----
+        describe("using const", function() {
+            it(" it will make a variable read-only", function() {
+                const MAX_SIZE = 10;
+                //MAX_SIZE = 12;//throws exception
+                expect(MAX_SIZE).toBe(10);
+            });
+        });
+
+
+        //destructuring
+        describe("destructuring", function() {
+            it("can destructure arrays", function() {
+                /*let x = 2;
+                let y = 3;
+                [x, y] = [y, x];*/
+        
+            var doWork = function() {return [1,3,2];}
+                let [,x,y,z] =doWork();
+                expect(x).toBe(3);
+                expect(y).toBe(2);
+                expect(z).toBeUndefined()
+            });
+            it("can destructure objects", function() {
+                var doWork = function() {
+                    return {
+                        firstName:"Scott",
+                        lastName:"Allen",
+                        handles : {
+                            twitter:"OdeToCode"
+                        }
+                    };
+                }
+                let {   firstName:first,
+                        handles:{ twitter:twitter } } = doWork();
+                expect(first).toBe("Scott");
+                expect(twitter).toBe("OdeToCode");
+            });
+        
+            it("works with parameters",function(){
+                let doWork =(url,{data, cache, headers})=> data;
+                let result = doWork(
+                                 "api/test" , {
+                                        data:"test",
+                                        cache:false
+                                  });
+                expect(result).toBe("test");
+            });
+        });
+        
+        //Default Parameter Values
+        describe("Default Parameter Values",function() {
+            it( "provides defaults" ,function() {
+                var doWork = (name="Scott") => name;
+                var result = doWork();
+                expect(result).toBe("Scott");
+            });
+        
+            it("will provide value for undefined" ,function() {
+                let doWork  = (a=1,b=2,c=3)=>[a,b,c];
+                let [a,b,c] = doWork(5,undefined);
+                expect(a).toBe(5);
+                expect(b).toBe(2);
+                expect(c).toBe(3);
+            });
+        
+            it("works with destructuring",function() {
+                let doWork = function(url,{data="Scott", cache=true}){return data};
+
+                let result = doWork("api/get",{
+                                cache:false
+                             });
+                expect(result).toBe("Scott");
+            });
+        });
+        
+        
+        //REST PARAMETERS
+        describe("Rest Parameters",function() {
+            it(" is like varargs",function() {
+                let doWork = function(name,...numbers) {
+                    let result = 0;
+                    numbers.forEach(function(n) {
+                        result +=n;
+                    });
+                    return result;
+                };
+                let result = doWork("Scott",1,2,3);
+                expect(result).toBe(6);
+
+            });
+        });
+        
+        
+        //SPREAD OPERATOR
+        describe("Spread Operator",function() {
+            it("can spread array",function(){
+            });
+            it("can build array",function(){
+                var a =[4,5,6];
+            var b =[1,2,3,...a,7];
+            expect(b).toEqual([1,2,3,4,5,6,7]);
+            });
+        });
+        
+        
+        //Template Literals
+        describe("Template Literals",function() {
+            it("can combine",function(){
+                var name = "Rupesh";
+                expect(`Hello ${name}`).toBe("Hello Rupesh");
+            });
+        
+            it("can use tags",function() {
+                let doWork = function(strings, ...values) {
+                }
+                let [x,y] = [1,2];
+                var result = doWork `${x} + ${y} is ${x+y}`;
+              });
+          });
+        
+        
+        //CLASS
+        
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
